@@ -39,7 +39,6 @@ if __name__ == "__main__":
         assert mot_plus_long_dico(words, ['b', 'a', 'c']) == "abaca"
         assert mot_plus_long_dico(words, [
             'a', 'n', 't', 'i', 'c', 'o', 'n', 's', 't', 'u', 'e', 'l', 'm']) == "anticonstitutionnellement"
-
         assert mot_plus_long_dico(['sacre', 'sabre', 'baser', 'cabre', 'garce', 'crase', 'brase', 'barge', 'caser', 'jaser', 'crabe', 'scare', 'aber', 'gare', 'sage', 'gars', 'rase', 'arec', 'acre', 'jars', 'case', 'base',
                                   'cage', 'rage', 'jase', 'bras', 'race', 'ars', 'sac', 'arc', 'are', 'jar', 'jas', 'bar', 'bas', 'ace', 'cas', 'car', 'age', 'bac', 'cab', 'as', 'ra', 'sa', 'a'], ['a', 'r', 'b', 'g', 'e', 's', 'c', 'j']) == "sacre"
 
