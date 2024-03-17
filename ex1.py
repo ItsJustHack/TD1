@@ -17,13 +17,46 @@ assert check_word_feasibility("test", ['t', 'e', 's'])
 assert check_word_feasibility("salut", ['s', 't', 'a', 'l', 'u', 'd'])
 
 
+def available_words(words: list, available_letters: list, joker=False) -> list:
+    """Returns the words list without the unavailable words"""
+    # This function makes the overall execution slower but the code is easier to read
+    # (and it's python, who cares about speed)
+    words_available = []
+    if joker:  # I'm absolutely sure there is a better way to do this
+        for word in words:
+            if check_word_feasibility_with_joker(word, available_letters):
+                words_available.append(word)
+    else:
+        for word in words:
+            if check_word_feasibility(word, available_letters):
+                words_available.append(word)
+    return words_available
+
+
+def check_word_feasibility_with_joker(word, available_letters):
+    # This function is required for exercice 4
+    """Check if a word is doable with the available letters and 1 joker"""
+    is_joker_used = False
+    for letters in word:
+        if letters not in available_letters and is_joker_used:
+            return False
+        elif letters not in available_letters and not is_joker_used:
+            available_letters.append(letters)
+            is_joker_used = True
+    return True
+
+
+assert available_words(["test", "voila", "papier"], [
+                       't', 'e', 's', 't']) == ["test"]
+
+
 def mot_plus_long_dico(words: list, available_letters: list) -> str:
-    """ Search the longest word through a file"""
+    """ Search the longest word through a list"""
     max_length = 0
     current_word = ""
-    for word in words:
-        if len(word) > max_length and check_word_feasibility(word,
-                                                             available_letters):
+    words_available = available_words(words, available_letters)
+    for word in words_available:
+        if len(word) > max_length:
             current_word = word
             max_length = len(word)
     return current_word
@@ -45,6 +78,8 @@ if __name__ == "__main__":
         print("If this runs, the function seems to work")
     except FileNotFoundError:
         raise "File not found, exit"
+    except AssertionError:
+        raise "Un test a échoué"
     except Exception as e:
         # Not sure about the way to handle any other error
         print(f"An error occured: {e}")
