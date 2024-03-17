@@ -22,7 +22,7 @@ def available_words(words: list, available_letters: list, joker=False) -> list:
     # This function makes the overall execution slower but the code is easier to read
     # (and it's python, who cares about speed)
     words_available = []
-    if joker:  # I'm absolutely sure there is a better way to do this
+    if joker:  # I'm absolutely certain there is a better way to do this
         for word in words:
             if check_word_feasibility_with_joker(word, available_letters):
                 words_available.append(word)
@@ -33,7 +33,8 @@ def available_words(words: list, available_letters: list, joker=False) -> list:
     return words_available
 
 
-def check_word_feasibility_with_joker(word: str, available_letters: list) -> bool:
+def check_word_feasibility_with_joker(word: str,
+                                      available_letters: list) -> bool:
     # This function is required for exercice 4
     """Check if a word is doable with the available letters and 1 joker"""
     letter_added = ''
@@ -42,7 +43,6 @@ def check_word_feasibility_with_joker(word: str, available_letters: list) -> boo
         if letters not in available_letters + [letter_added] and is_joker_used:
             return False
         elif letters not in available_letters + [letter_added] and not is_joker_used:
-            #  available_letters.append(letters) # MODIFIE LA LISTE EN ARGUMENT ??????
             letter_added = letters
             is_joker_used = True
     return True

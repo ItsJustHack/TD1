@@ -1,4 +1,4 @@
-from ex1 import check_word_feasibility, available_words
+from ex1 import available_words
 from ex1 import FICHIER
 
 # Score of a letter is represented by a dict {letter : value}
@@ -35,7 +35,6 @@ def highest_score_dict(words: str, available_letters: list,
                        score_dict: dict, allow_joker=False) -> (str, int):
     """ Search the word that has the highest score with available letters"""
     words_available = available_words(words, available_letters, allow_joker)
-    assert "psychophysiologique" not in words_available
     return max_score(words_available, score_dict)
 
 
@@ -64,12 +63,19 @@ if __name__ == "__main__":
                            ['k', 'w', 'c']) == ['kw']
 
     assert highest_score_dict(['kw', 'rte', 'ver', 'ce', 'etc', 'cet', 'ex',
-                               'cr', 'et', 'ter', 'te', 'ct'], ['k', 'w', 'c'], dico_score) == ("kw", 20)
+                               'cr', 'et', 'ter', 'te', 'ct'], ['k', 'w', 'c'],
+                              dico_score) == ("kw", 20)
 
     f = open(FICHIER, "r")
     words = []
     for line in f:
         words.append(line.rstrip("\n"))
 
-    print(highest_score_dict(words, [
-          'a', 'n', 't', 'i', 'o', 'n', 's', 't', 'u', 'e', 'l', 'm'], dico_score, True))
+    biggest_point = highest_score_dict(words, ['a', 'b', 'c', 'd', 'e', 'f',
+                                               'g', 'h', 'i', 'j', 'k', 'l',
+                                               'm', 'n', 'o', 'p', 'q', 'r',
+                                               's', 't', 'u', 'v', 'w',
+                                               'y', 'z'], dico_score)
+
+    print("Le mot rapportant le plus de points est le mot", biggest_point[0],
+          "avec", biggest_point[1], "points")
