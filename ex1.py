@@ -21,10 +21,13 @@ def available_words(words: list, available_letters: list, joker=False) -> list:
     """Returns the words list without the unavailable words"""
     # This function makes the overall execution slower but the code is easier to read
     # (and it's python, who cares about speed)
+    print(available_letters)
     words_available = []
     if joker:  # I'm absolutely sure there is a better way to do this
         for word in words:
             if check_word_feasibility_with_joker(word, available_letters):
+                if word == "psychophysiologique":
+                    print(word, available_letters)
                 words_available.append(word)
     else:
         for word in words:
@@ -33,21 +36,32 @@ def available_words(words: list, available_letters: list, joker=False) -> list:
     return words_available
 
 
-def check_word_feasibility_with_joker(word, available_letters):
+def check_word_feasibility_with_joker(word: str, available_letters: list) -> bool:
     # This function is required for exercice 4
     """Check if a word is doable with the available letters and 1 joker"""
+    letter_added = ''
     is_joker_used = False
     for letters in word:
-        if letters not in available_letters and is_joker_used:
+        if letters not in available_letters + [letter_added] and is_joker_used:
             return False
-        elif letters not in available_letters and not is_joker_used:
-            available_letters.append(letters)
+        elif letters not in available_letters + [letter_added] and not is_joker_used:
+            #  available_letters.append(letters) # MODIFIE LA LISTE EN ARGUMENT ??????
+            letter_added = letters
             is_joker_used = True
     return True
 
 
 assert available_words(["test", "voila", "papier"], [
                        't', 'e', 's', 't']) == ["test"]
+
+assert not check_word_feasibility_with_joker("psychophysiologique",
+                                             ['a', 'n', 't', 'i', 'o', 'n', 's', 't', 'u', 'e', 'l', 'm'])
+
+
+assert check_word_feasibility_with_joker("test", ['t', 's'])
+assert check_word_feasibility_with_joker("test", ['t', 'e', 's'])
+assert not check_word_feasibility_with_joker("anaconda", ['t', 's'])
+assert not check_word_feasibility_with_joker("testr", ['t', 's'])
 
 
 def mot_plus_long_dico(words: list, available_letters: list) -> str:

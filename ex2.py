@@ -1,13 +1,14 @@
-from ex1 import check_word_feasibility
+from ex1 import check_word_feasibility, available_words
 from ex1 import FICHIER
 
-# On représente les points des lettres par un dico
+# Score of a letter is represented by a dict {letter : value}
 
 
 def score_word(word: str, score_dict: dict) -> int:
     """Calculation of the score of a word out of a dict"""
     score = 0
     try:
+        # Do not accept a word if a letter is not in the dict
         for letter in word:
             score += dico_score[letter]
         return score
@@ -17,36 +18,28 @@ def score_word(word: str, score_dict: dict) -> int:
         raise "Unknown error occured, exit"
 
 
-def highest_score_dict(fichier: str,
-                         lettres_possibles: list):
+def max_score(words: list, score_dict: dict) -> (str, int):
+    """Returns the highest score among a word list"""
+    if len(words) == 0:
+        raise "Word list is empty, exit"
+    score = score_word(words[0], score_dict)
+    current_word = words[0]
+    for word in words[1:]:
+        if score_word(word, score_dict) > score:
+            score = score_word(word, score_dict)
+            current_word = word
+    return (current_word, score)
+
+
+def highest_score_dict(words: str, available_letters: list,
+                       score_dict: dict, allow_joker=False) -> (str, int):
     """ Search the word that has the highest score with available letters"""
-    try:
-        max_score = 0
-        mot_actuel = ""
-        for word in words:
-            score_mot_actuel = score_word(word)
-            if score_mot_actuel > max_score and check_word_feasibility(word, lettres_possibles):
-                mot_actuel = word
-                score_max = score_mot_actuel
-        return mot_actuel
-    except FileNotFoundError:
-        raise ("File not found")
-
-
-def mot_faisable_plus_joker(word, available_letters):
-    """Check if a word is doable with the available letters and 1 joker"""
-    isJokerUsed = False
-    for letters in word:
-        if letters not in available_letters and isJokerUsed:
-            return False
-        elif letters not in available_letters and not isJokerUsed:
-            available_letters.append(letters)
-            isJokerUsed = True
-    return True
+    words_available = available_words(words, available_letters, allow_joker)
+    assert "psychophysiologique" not in words_available
+    return max_score(words_available, score_dict)
 
 
 if __name__ == "__main__":
-
     dico_score = {}
     for lettre in ['a', 'e', 'i', 'l', 'n', 'o', 'r', 's', 't', 'u']:
         dico_score[lettre] = 1
@@ -61,11 +54,22 @@ if __name__ == "__main__":
     for lettre in ['k', 'w', 'x', 'y', 'z']:
         dico_score[lettre] = 10
 
-    assert (score_word("kaw", dico_score) == 21)
+    assert score_word("kaw", dico_score) == 21
+    assert score_word("lettre", dico_score) == 6
+
+    assert max_score(['rte', 'ver', 'ce', 'etc', 'cet', 'ex',
+                      'cr', 'et', 'ter', 'te', 'ct'], dico_score) == ('ex', 11)
+
+    assert available_words(['kw', 'rte', 'ver', 'ce', 'etc', 'cet', 'ex'],
+                           ['k', 'w', 'c']) == ['kw']
+
+    assert highest_score_dict(['kw', 'rte', 'ver', 'ce', 'etc', 'cet', 'ex',
+                               'cr', 'et', 'ter', 'te', 'ct'], ['k', 'w', 'c'], dico_score) == ("kw", 20)
 
     f = open(FICHIER, "r")
     words = []
     for line in f:
         words.append(line.rstrip("\n"))
 
-print(score_plus_haut_dico("frenchssaccent.dic", ['b', 'a', 'c']))
+    print(highest_score_dict(words, [
+          'a', 'n', 't', 'i', 'o', 'n', 's', 't', 'u', 'e', 'l', 'm'], dico_score, True))
