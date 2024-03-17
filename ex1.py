@@ -21,13 +21,10 @@ def available_words(words: list, available_letters: list, joker=False) -> list:
     """Returns the words list without the unavailable words"""
     # This function makes the overall execution slower but the code is easier to read
     # (and it's python, who cares about speed)
-    print(available_letters)
     words_available = []
     if joker:  # I'm absolutely sure there is a better way to do this
         for word in words:
             if check_word_feasibility_with_joker(word, available_letters):
-                if word == "psychophysiologique":
-                    print(word, available_letters)
                 words_available.append(word)
     else:
         for word in words:
