@@ -5,8 +5,21 @@ class Noeud:
         self.set_label(label)
         self.set_children(children)
 
+    # Je pense que c'est pour des arbres binaires sinon je ne comprends 
+    # comment faire pour les parenthèses :(
+    def __str__(self):
+        if self.is_leaf():
+            return self.label
+        return "(" + str([child.__str__()+ ',' for child in self.children]) + ")"
+        
+
+    def __eq__(self, __value: object) -> bool :
+        if self.nb_children() != __value.nb_children():
+            return False
+        return True
+
     def label(self):
-        return f"Label : {self.label}"
+        return f"{self.label}"
 
     def set_label(self, label):
         if not isinstance(label, str):
@@ -17,7 +30,6 @@ class Noeud:
         for child in children:
             if not isinstance(child, Noeud):
                 raise "Child is not an instance of Noeud"
-
         self.children = children
 
     def fchildren(self):

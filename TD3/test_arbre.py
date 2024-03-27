@@ -24,6 +24,11 @@ class TestTreeMethods(unittest.TestCase):
         self.assertEqual(self.n2.depth(), 1)
         self.assertEqual(self.n1.depth(), 0)
         self.assertEqual(self.n3.depth(), 3)
+
+    def test_str(self):
+        print("Affichage du noeud", self.n1)
+        print("Affichage du noeud", self.n2)
+        print("Affichage du noeud", self.n3)
         
 
 
