@@ -5,14 +5,16 @@ class Noeud:
         self.set_label(label)
         self.set_children(children)
 
-    # Je pense que c'est pour des arbres binaires sinon je ne comprends 
+    # Je pense que c'est pour des arbres binaires sinon je ne comprends
     # comment faire pour les parenthèses :(
-        
     def __str__(self):
         if self.is_leaf():
-            return str(self.label())
-        else:
-            return f"{self.label()}({','.join(map(str, self.children()))})"
+            return self.label()
+        string = self.label() + '('
+        for child in self.children():
+            string += child.__str__() + ','
+        string = string.rstrip(',') + ")"
+        return string
 
     def __eq__(self, other):
         if not isinstance(other, Noeud):
@@ -49,8 +51,8 @@ class Noeud:
         return len(self.children) + sum([child.nb_children() for child in
                                          self.children])
 
-    def child(self, i:int):
-        if  i >= self.nb_children() or i < 0:
+    def child(self, i: int):
+        if i >= self.nb_children() or i < 0:
             raise "Index out of bounds, not enough children"
         return self.children[i]
 
@@ -73,10 +75,20 @@ class Noeud:
                 return Noeud('+', *[child.deriv(var) for child in self.children()])
             elif self.label() == '*':
                 if any(child.label() == var for child in self.children()):
+                    # The fun part 
+                    L = []
+                    T = []
+                    for (i, child) in self.children().enumerate():
+                        for j in len(self.children()):
+                            if j == i:
+                                T.append(self.child(i).deriv(var))
+                            else:
+                                T.append(self.child(i))
+                        L.append('*', T)
+                        T = []
+                    print(L)
                     return Noeud('+', *[Noeud('*', *self.children()).deriv(var)])
                 else:
                     return Noeud('0')
             else:
                 raise ValueError("Unsupported operator")
-        
-
