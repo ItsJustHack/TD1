@@ -7,6 +7,8 @@ class TestTreeMethods(unittest.TestCase):
         self.n1 = Noeud('4')
         self.n2 = Noeud('2', self.n1)
         self.n3 = Noeud('1', Noeud('2', Noeud('3', Noeud('4'))))
+        self.n4 = Noeud('1', Noeud('2', Noeud('3', Noeud('4'), Noeud('5'))))
+        self.polynome = Noeud('*', Noeud('X'), Noeud('X'))
 
     def test_is_leaf(self):
         self.assertTrue(Noeud('4').is_leaf())
@@ -18,7 +20,7 @@ class TestTreeMethods(unittest.TestCase):
         self.assertEqual(self.n3.nb_children(), 3)
 
     def test_children(self):
-        self.assertEqual(self.n2.fchildren()[0], self.n1)
+        self.assertEqual(self.n2.children()[0], self.n1)
 
     def test_depth(self):
         self.assertEqual(self.n2.depth(), 1)
@@ -29,6 +31,8 @@ class TestTreeMethods(unittest.TestCase):
         print("Affichage du noeud", self.n1)
         print("Affichage du noeud", self.n2)
         print("Affichage du noeud", self.n3)
+        print("Affichage du noeud", self.n4)
+        print(self.polynome.deriv('X'))
         
 
 

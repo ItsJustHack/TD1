@@ -5,8 +5,6 @@ class Noeud:
         self.set_label(label)
         self.set_children(children)
 
-    # Je pense que c'est pour des arbres binaires sinon je ne comprends
-    # comment faire pour les parenthèses :(
     def __str__(self):
         if self.is_leaf():
             return self.label()
@@ -29,7 +27,7 @@ class Noeud:
         return True
 
     def label(self):
-        return f"{self.label}"
+        return f"{self.__label}"
 
     def set_label(self, label):
         if not isinstance(label, str):
@@ -48,13 +46,13 @@ class Noeud:
     def nb_children(self):
         if self.is_leaf():
             return 0
-        return len(self.children) + sum([child.nb_children() for child in
-                                         self.children])
+        return len(self.__children) + sum([child.nb_children() for child in
+                                         self.children()])
 
     def child(self, i: int):
         if i >= self.nb_children() or i < 0:
             raise "Index out of bounds, not enough children"
-        return self.children[i]
+        return self.__children[i]
 
     def is_leaf(self):
         return len(self.__children) == 0
@@ -78,16 +76,18 @@ class Noeud:
                     # The fun part 
                     L = []
                     T = []
-                    for (i, child) in self.children().enumerate():
-                        for j in len(self.children()):
+                    i = 0
+                    for child in self.children():
+                        for j in range(len(self.children())):
                             if j == i:
                                 T.append(self.child(i).deriv(var))
                             else:
                                 T.append(self.child(i))
-                        L.append('*', T)
+                        L.append(Noeud('*', *T))
                         T = []
+                        i+=1
                     print(L)
-                    return Noeud('+', *[Noeud('*', *self.children()).deriv(var)])
+                    return Noeud('+', *L)
                 else:
                     return Noeud('0')
             else:
