@@ -49,6 +49,19 @@ class TestHashtable(unittest.TestCase):
             h.repartition()
         except Exception as e:
             raise e
+
+    def test_put_auto_resize(self):
+        try:
+            h = Hashtable(second_hash_function, 20)
+            f = open("frenchssaccent.dic")
+            for ligne in f:
+                mot = ligne.rstrip("\n")
+                h.put_auto_resize(mot, len(mot))
+            h.repartition()
+        except Exception as e:
+            raise e
+
+
         
 
 if __name__ == "__main__":
