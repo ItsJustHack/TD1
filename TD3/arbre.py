@@ -73,7 +73,7 @@ class Noeud:
                 return Noeud('+', *[child.deriv(var) for child in self.children()])
             elif self.label() == '*':
                 if any(child.label() == var for child in self.children()):
-                    # The fun part 
+                    # The fun part 
                     L = []
                     T = []
                     i = 0
@@ -92,3 +92,4 @@ class Noeud:
                     return Noeud('0')
             else:
                 raise ValueError("Unsupported operator")
+
