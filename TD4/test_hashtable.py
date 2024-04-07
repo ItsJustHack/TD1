@@ -1,7 +1,8 @@
-import unittest 
-from hashtable import Hashtable 
-from hashtable import first_hash_function 
-from hashtable import second_hash_function 
+import unittest
+from hashtable import Hashtable
+from hashtable import first_hash_function
+from hashtable import second_hash_function
+
 
 class TestHashtable(unittest.TestCase):
     def setUp(self):
@@ -61,8 +62,6 @@ class TestHashtable(unittest.TestCase):
         except Exception as e:
             raise e
 
-
-        
 
 if __name__ == "__main__":
     unittest.main()

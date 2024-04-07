@@ -1,17 +1,18 @@
 INITIAL_LENGTH = 10
 
+
 class Hashtable:
 
-    def __init__(self, hash_function, length = INITIAL_LENGTH):
+    def __init__(self, hash_function, length=INITIAL_LENGTH):
         self.__hash_function = hash_function
-        self.__length = length # Useful if we want to increase N
+        self.__length = length  # Useful if we want to increase N
         self.__table = self.create_table()
-
 
     @property
     def table(self):
         """The table property."""
         return self.__table
+
     @table.setter
     def table(self, value):
         self.__table = value
@@ -41,16 +42,16 @@ class Hashtable:
         """ Returns the number of tuple (key, value) in the table"""
         return sum([len(position) for position in self.table])
 
-    def put(self, key, value): 
+    def put(self, key, value):
         """Add a value to the hashing table"""
         pos = self.__hash_function(key) % self.length
         if (key, value) not in self.table[pos]:
             self.table[pos].append((key, value))
-        else : 
+        else:
             i = self.keys_pos(pos).index(key)
             self.table[pos][i] = (key, value)
-    
-    def put_auto_resize(self, key, value): 
+
+    def put_auto_resize(self, key, value):
         """Add a value to the hashing table"""
         pos = self.__hash_function(key) % self.length
         if self.nb_elements() >= 10*self.length:
@@ -58,15 +59,15 @@ class Hashtable:
             self.resize()
         if (key, value) not in self.table[pos]:
             self.table[pos].append((key, value))
-        else : 
+        else:
             i = self.keys_pos(pos).index(key)
             self.table[pos][i] = (key, value)
 
     def get(self, key):
         """Get a value from a key"""
         pos = self.__hash_function(key) % self.length
-        keys = self.keys_pos(pos) 
-        if key not in keys: 
+        keys = self.keys_pos(pos)
+        if key not in keys:
             return None
         else:
             return self.table[pos][keys.index(key)][1]
@@ -93,16 +94,14 @@ class Hashtable:
             for (key, value) in position:
                 new_hashtable.put(key, value)
         self.table = new_hashtable.table
-        
 
 
-
-def first_hash_function(x : str):
+def first_hash_function(x: str):
     """ Create the first naïve hash function"""
     return sum([ord(char) for char in x])
 
 
-def second_hash_function(x : str): 
+def second_hash_function(x: str):
     """ Create a better hash function"""
     h = 0
     for (i, char) in enumerate(x):
