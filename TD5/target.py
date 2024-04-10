@@ -1,4 +1,5 @@
 import tkinter as tk
+from random import randint
 
 class Target:
     def __init__(self):
@@ -11,7 +12,10 @@ class Target:
             return self.__canvas.create_oval(x0, y0, x1, y1, outline = color)
 
         def feu():
-            pass
+            for i in range(5):
+                x = randint(10, 390)
+                y = randint(10, 400)
+                self.__canvas.create_oval(x, y, x + 10, y - 10, fill="black")
 
         def draw_target():
             # Efface tout contenu précédent
