@@ -15,10 +15,6 @@ class Target:
             y1 = y + r
             return self.__canvas.create_oval(x0, y0, x1, y1, outline=color)
 
-
-
-
-
         def draw_target():
             # Efface tout contenu précédent
             self.__canvas.delete("all")
@@ -86,27 +82,6 @@ class Target:
         self.__canvas.move(self.__mire, dx, dy)
         self.__root.after(100, self.move_mire)
 
-    def score(self, x: int, y: int) -> int:
-        """Returns the score of a position"""
-        if x < 0 or x > 320 or y < 0 or y > 320:
-            return 0
-        distance_from_center = sqrt((x - 200) ** 2 + (y - 200) ** 2)
-        if distance_from_center < 20:
-            return 6
-        elif distance_from_center < 50:
-            return 5
-        elif distance_from_center < 80:
-            return 4
-        elif distance_from_center < 110:
-            return 3
-        elif distance_from_center < 140:
-            return 2
-        elif distance_from_center < 170:
-            return 1
-        else:
-            return 0
-
-    
 
     def check_hit_mire(self, event):
         (x1, y1, x2, y2) = self.__canvas.coords(self.__mire)
