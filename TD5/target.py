@@ -5,8 +5,8 @@ from math import sqrt
 
 class Target:
     def __init__(self):
-        
         self.__score = 0
+        self.__shots_fired = 0
 
         def create_circle(x, y, r, color="red"):  # center coordinates, radius
             x0 = x - r
@@ -16,33 +16,10 @@ class Target:
             return self.__canvas.create_oval(x0, y0, x1, y1, outline=color)
 
         def feu():
-            x, y = 200, 200
             for _ in range(5):
-                x = randint(10, 390)
-                y = randint(10, 390)
-                self.__canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="black")
-                self.__score += score(x, y)
-            self.__sample_text.config(text = f"Score : {self.__score}")
+                self.create_shot()
+            self.__sample_text.config(text=f"Score : {self.__score}")
 
-        def score(x: int, y: int) -> int:
-            """Returns the score of a position"""
-            if x < 0 or x > 320 or y < 0 or y > 320:
-                return 0
-            distance_from_center = sqrt((x - 200) ** 2 + (y - 200) ** 2)
-            if distance_from_center < 20: 
-                return 6
-            elif distance_from_center < 50:
-                return 5
-            elif distance_from_center < 80:
-                return 4
-            elif distance_from_center < 110:
-                return 3
-            elif distance_from_center < 140:
-                return 2
-            elif distance_from_center < 170:
-                return 1
-            else: 
-                return 0
 
         def draw_target():
             # Efface tout contenu précédent
@@ -102,11 +79,45 @@ class Target:
         fire_button = tk.Button(self.__root, text="Feu !", command=feu)
         fire_button.pack(side=tk.LEFT)
 
-        self.__sample_text = tk.Label(self.__root, text =
-                                      f"Score : {self.__score}")
+        self.__sample_text = tk.Label(self.__root, text=f"Score : {self.__score}")
         self.__sample_text.pack(side=tk.LEFT)
 
+    def score(self, x: int, y: int) -> int:
+        """Returns the score of a position"""
+        if x < 0 or x > 320 or y < 0 or y > 320:
+            return 0
+        distance_from_center = sqrt((x - 200) ** 2 + (y - 200) ** 2)
+        if distance_from_center < 20:
+            return 6
+        elif distance_from_center < 50:
+            return 5
+        elif distance_from_center < 80:
+            return 4
+        elif distance_from_center < 110:
+            return 3
+        elif distance_from_center < 140:
+            return 2
+        elif distance_from_center < 170:
+            return 1
+        else:
+            return 0
+
+    def create_shot(self) : 
+        if self.__shots_fired >= 5:
+            return;
+        x = randint(10, 390)
+        y = randint(10, 390)
+        self.__canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="black")
+        print(x, y, self.score(x, y))
+        self.__score += self.score(x, y)
+        self.__sample_text.config(text=f"Score : {self.__score}")
+        self.__shots_fired += 1
+
+    def shot_with_f(self, event):
+        self.create_shot()
+
     def execute(self):
+        self.__root.bind("f", self.shot_with_f)
         self.__root.mainloop()
 
 
