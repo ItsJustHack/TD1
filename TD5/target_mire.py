@@ -2,13 +2,18 @@ import tkinter as tk
 from random import randint
 from math import sqrt
 from random import choice
+import time
 
+TIME_INTERVAL = 1
+REFRESH_RATE = 100 # Every 100 milliseconds the target is updated
 
 class Target:
     def __init__(self):
         self.__score = 0
+        self.__initial_time = time.time()
 
         def create_circle(x, y, r, color="red"):  # center coordinates, radius
+            """ A small shortcut to create a circle """ 
             x0 = x - r
             y0 = y - r
             x1 = x + r
@@ -16,6 +21,7 @@ class Target:
             return self.__canvas.create_oval(x0, y0, x1, y1, outline=color)
 
         def draw_target():
+            """ This function draws the target"""
             # Efface tout contenu précédent
             self.__canvas.delete("all")
 
@@ -77,13 +83,29 @@ class Target:
         self.__sample_text.pack(side=tk.LEFT)
 
     def move_mire(self) : 
-        dx = choice([-10,10,0])
-        dy = choice([-10,10,0])
+        """ This function moves the target and periodically gets closer to the center"""
+        time_passed_in_seconds = (time.time() - self.__initial_time) % 60
+        (x1, y1, x2, y2) = self.__canvas.coords(self.__mire)
+        x = (x2 + x1) / 2
+        y = (y2 + y1) / 2
+        (dx, dy) = (choice([-10,10,0]), choice([-10, 10, 0]))
+        (x_offset, y_offset) = (x - 200, y - 200)
+        if (time_passed_in_seconds // TIME_INTERVAL) % 2 == 0 : 
+            # We return to the center
+            dx += x_offset / 10
+            dy += y_offset / 10
+
+        else : 
+            # We get far away from the center
+            dx -= x_offset / 10
+            dy -= y_offset / 10
+
         self.__canvas.move(self.__mire, dx, dy)
-        self.__root.after(100, self.move_mire)
+        self.__root.after(REFRESH_RATE, self.move_mire)
 
 
     def check_hit_mire(self, event):
+        """ This function checks if the target has been hit"""
         (x1, y1, x2, y2) = self.__canvas.coords(self.__mire)
         x = (x2 + x1) / 2
         y = (y2 + y1) / 2
@@ -94,7 +116,7 @@ class Target:
 
 
     def execute(self):
-        self.__root.after(100, self.move_mire)
+        self.__root.after(REFRESH_RATE, self.move_mire)
         self.__root.bind("f", self.check_hit_mire)
         self.__root.mainloop()
 
